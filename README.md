@@ -134,3 +134,24 @@ echo "exit=${PIPESTATUS[0]}"      # → exit=0
 
 **Тестийн (assertion-ы) тоо = 41**, failed = 0, **exit code = 0**.
 15 спецификаци → 15 хавтас; 38 хүсэлт = setup PUT-ууд + POST-ууд + S13-ийн GET.
+
+### 5.2. FAIL — `lab05-collection-fail.json` → `results/newman-fail.txt`
+
+`lab05-collection-fail.json` нь үндсэн collection-ий **тусдаа хуулбар** бөгөөд зөвхөн нэг
+oracle-ийг зориуд буруу болгосон: S1-ийн `pm.response.to.have.status(201)` → `status(200)`.
+Үндсэн `lab05-collection.json` зөв хэвээр.
+
+```bash
+newman run lab05-collection-fail.json --color off 2>&1 | tee results/newman-fail.txt
+echo "exit=${PIPESTATUS[0]}"      # → exit=1
+```
+
+Үр дүн: assertions executed **41**, failed **1**, **exit code = 1**:
+
+```
+ 1.  AssertionError  Статус код 200
+                     expected response to have status code 200 but got 201
+                     inside "S1 Идэвхтэй, урьдач нөхцөл хангасан оюутан бүртгүүлэхэд 201 OK / POST /registrations"
+```
+
+Энэ бол CI quality gate-ийн зарчим: oracle нэг ч унавал newman 0 биш код буцааж, pipeline-ийг зогсооно.
