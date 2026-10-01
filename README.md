@@ -111,3 +111,26 @@ S7, S8 нь заавар болон тодруулгад "аль алдаа тү
 `registrationID`-ийн яг утгыг хаана ч шалгаагүй: S1/S9/S14-д "эерэг тоо", S13-д POST-ийн
 хариунаас авсан ID-гаар GET жагсаалтаас мөр хайна, S15-д хоёр ID-г хооронд нь харьцуулна.
 `{{baseUrl}}` = `http://localhost:3000` collection variable.
+
+---
+
+## 5. Даалгавар 4 — Newman-аар автоматжуулах
+
+Exit code-ийг `| tee`-ийн дараах `$?` биш, `${PIPESTATUS[0]}`-оор (newman-ийн өөрийнх) авсан.
+Exit code бүрийг мөн `results/exit-*.txt` файлд хадгалсан.
+
+### 5.1. PASS — `results/newman-pass.txt`
+
+```bash
+newman run lab05-collection.json --color off 2>&1 | tee results/newman-pass.txt
+echo "exit=${PIPESTATUS[0]}"      # → exit=0
+```
+
+| Мөр | executed | failed |
+|---|---|---|
+| requests | 38 | 0 |
+| test-scripts | 17 | 0 |
+| **assertions** | **41** | **0** |
+
+**Тестийн (assertion-ы) тоо = 41**, failed = 0, **exit code = 0**.
+15 спецификаци → 15 хавтас; 38 хүсэлт = setup PUT-ууд + POST-ууд + S13-ийн GET.

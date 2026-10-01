@@ -1,0 +1,195 @@
+(node:5364) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+Lab05 Registration API
+
+□ S1 Идэвхтэй, урьдач нөхцөл хангасан оюутан бүртгүүлэхэд 201 OK
+└ Setup: PUT /students/B231234567
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 39ms]
+
+└ Setup: PUT /courses/CS313
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 5ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 202B, 7ms]
+  √  Статус код 201
+  √  result = OK
+  √  registrationID тоо байна (яг утгыг шалгахгүй)
+
+□ S2 Бүртгэлгүй оюутан бүртгүүлэхэд ERROR_NO_STUDENT
+└ Setup: PUT /courses/CS313-S2
+  PUT http://localhost:3000/courses/CS313-S2 [200 OK, 178B, 5ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 192B, 4ms]
+  √  Статус код 200
+  √  result = ERROR_NO_STUDENT
+  √  Алдааны үед registrationID буцаахгүй
+
+□ S3 Идэвхгүй оюутан бүртгүүлэхэд ERROR_INACTIVE_STUDENT
+└ Setup: PUT /students/B231234003
+  PUT http://localhost:3000/students/B231234003 [200 OK, 178B, 6ms]
+
+└ Setup: PUT /courses/CS313-S3
+  PUT http://localhost:3000/courses/CS313-S3 [200 OK, 178B, 4ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 198B, 5ms]
+  √  Статус код 200
+  √  result = ERROR_INACTIVE_STUDENT
+  √  Алдааны үед registrationID буцаахгүй
+
+□ S4 Байхгүй хичээлд бүртгүүлэхэд ERROR_NO_COURSE
+└ Setup: PUT /students/B231234004
+  PUT http://localhost:3000/students/B231234004 [200 OK, 178B, 6ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 191B, 4ms]
+  √  Статус код 200
+  √  result = ERROR_NO_COURSE
+  √  Алдааны үед registrationID буцаахгүй
+
+□ S5 Урьдач нөхцөлийг огт үзээгүй оюутанд ERROR_PREREQUISITES
+└ Setup: PUT /students/B231234005
+  PUT http://localhost:3000/students/B231234005 [200 OK, 178B, 4ms]
+
+└ Setup: PUT /courses/CS313-S5
+  PUT http://localhost:3000/courses/CS313-S5 [200 OK, 178B, 5ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 215B, 3ms]
+  √  Статус код 200
+  √  result = ERROR_PREREQUISITES
+  √  missing = ["CS201"]
+
+□ S6 Урьдач нөхцлийн зарим нь дутуу оюутанд ERROR_PREREQUISITES
+└ Setup: PUT /students/B231234006
+  PUT http://localhost:3000/students/B231234006 [200 OK, 178B, 5ms]
+
+└ Setup: PUT /courses/CS413-S6
+  PUT http://localhost:3000/courses/CS413-S6 [200 OK, 178B, 3ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 215B, 3ms]
+  √  Статус код 200
+  √  result = ERROR_PREREQUISITES
+  √  missing = ["CS201"]
+
+□ S7 Идэвхгүй оюутан + байхгүй хичээл: ERROR_INACTIVE_STUDENT (давхар алдаа)
+└ Setup: PUT /students/B231234007
+  PUT http://localhost:3000/students/B231234007 [200 OK, 178B, 3ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 198B, 3ms]
+  √  Статус код 200
+  √  result = ERROR_INACTIVE_STUDENT
+
+□ S8 Бүртгэлгүй оюутан + байхгүй хичээл: ERROR_NO_STUDENT (давхар алдаа)
+└ POST /registrations
+  POST http://localhost:3000/registrations [200 OK, 192B, 3ms]
+  √  Статус код 200
+  √  result = ERROR_NO_STUDENT
+
+□ S9 Урьдач нөхцөлгүй хичээлд хоосон coursesTaken-тэй оюутан бүртгүүлэхэд 201 OK (хязгаар)
+└ Setup: PUT /students/B231234009
+  PUT http://localhost:3000/students/B231234009 [200 OK, 178B, 5ms]
+
+└ Setup: PUT /courses/CS100-S9
+  PUT http://localhost:3000/courses/CS100-S9 [200 OK, 178B, 3ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 202B, 5ms]
+  √  Статус код 201
+  √  result = OK
+  √  registrationID тоо байна (яг утгыг шалгахгүй)
+
+□ S10 courseID талбар дутуу бол 400 ERROR_BAD_REQUEST (хязгаар)
+└ Setup: PUT /students/B231234010
+  PUT http://localhost:3000/students/B231234010 [200 OK, 178B, 4ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 4ms]
+  √  Статус код 400
+  √  result = ERROR_BAD_REQUEST
+
+□ S11 studentID хоосон мөр бол 400 ERROR_BAD_REQUEST (хязгаар)
+└ Setup: PUT /courses/CS313-S11
+  PUT http://localhost:3000/courses/CS313-S11 [200 OK, 178B, 4ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 4ms]
+  √  Статус код 400
+  √  result = ERROR_BAD_REQUEST
+
+□ S12 Буруу JSON илгээхэд 400 ERROR_BAD_JSON (хязгаар)
+└ POST /registrations
+  POST http://localhost:3000/registrations [400 Bad Request, 199B, 3ms]
+  √  Статус код 400
+  √  result = ERROR_BAD_JSON
+
+□ S13 Амжилттай бүртгэл GET /registrations жагсаалтад харагдана
+└ Setup: PUT /students/B231234013
+  PUT http://localhost:3000/students/B231234013 [200 OK, 178B, 5ms]
+
+└ Setup: PUT /courses/CS313-S13
+  PUT http://localhost:3000/courses/CS313-S13 [200 OK, 178B, 6ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 203B, 10ms]
+  √  Статус код 201
+
+└ GET /registrations
+  GET http://localhost:3000/registrations [200 OK, 841B, 9ms]
+  √  Статус код 200
+  √  Хариу массив байна
+  √  S13-ийн бүртгэл жагсаалтад зөв studentID/courseID-тэй байна
+
+□ S14 status, coursesTaken орхисон оюутан анхдагчаар active болж урьдач нөхцөлгүй хичээлд 201 OK (хязгаар)
+└ Setup: PUT /students/B231234014 (хоосон бие)
+  PUT http://localhost:3000/students/B231234014 [200 OK, 178B, 5ms]
+
+└ Setup: PUT /courses/CS100-S14 (хоосон бие)
+  PUT http://localhost:3000/courses/CS100-S14 [200 OK, 178B, 5ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 203B, 6ms]
+  √  Статус код 201
+  √  result = OK
+  √  registrationID тоо байна (яг утгыг шалгахгүй)
+
+□ S15 Ижил оюутан ижил хичээлд давтан бүртгүүлэхэд (ажиглалт) дахин 201 OK, шинэ registrationID
+└ Setup: PUT /students/B231234015
+  PUT http://localhost:3000/students/B231234015 [200 OK, 178B, 5ms]
+
+└ Setup: PUT /courses/CS100-S15
+  PUT http://localhost:3000/courses/CS100-S15 [200 OK, 178B, 5ms]
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 203B, 4ms]
+  √  Статус код 201
+
+└ POST /registrations
+  POST http://localhost:3000/registrations [201 Created, 203B, 4ms]
+  √  Статус код 201
+  √  Давтан бүртгэл өөр (илүү) registrationID авна
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              38 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              17 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │               0 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              41 │               0 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 2.7s                                    │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 1.55kB (approx)                        │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 5ms [min: 3ms, max: 39ms, s.d.: 5ms] │
+└─────────────────────────────────────────────────────────────┘
