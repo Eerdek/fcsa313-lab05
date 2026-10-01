@@ -155,3 +155,29 @@ echo "exit=${PIPESTATUS[0]}"      # → exit=1
 ```
 
 Энэ бол CI quality gate-ийн зарчим: oracle нэг ч унавал newman 0 биш код буцааж, pipeline-ийг зогсооно.
+
+### 5.3. DOWN — `results/newman-down.txt`
+
+Серверийг зогсоосны дараа (Ctrl+C / процессыг устгав) үндсэн collection-ийг ажиллуулав:
+
+```bash
+newman run lab05-collection.json --color off 2>&1 | tee results/newman-down.txt
+echo "exit=${PIPESTATUS[0]}"      # → exit=1
+```
+
+Гаралтад хүсэлт бүрд `connect ECONNREFUSED 127.0.0.1:3000` мөр гарсан (requests 38 / failed 38,
+assertions 41 / failed 41), **exit code = 1**.
+
+**Интерфейсийн алдаа vs oracle-ийн алдаа:** DOWN үед хүсэлт серверт огт хүрээгүй тул хариу
+байхгүй, assertion-ууд "хүлээгдсэн утга буруу" гэж биш хариугүйгээс унасан — энэ бол системтэй
+холбогдох **интерфейсийн (холболтын) алдаа**; харин FAIL үед сервер зөв `201` хариу өгсөн боловч
+бидний oracle буруу утга (`200`) хүлээсэн тул энэ нь **oracle-ийн алдаа**. Хоёулаа exit=1 буцаадаг
+тул CI-д ялгахын тулд гаралтын `ECONNREFUSED` эсвэл `AssertionError` мөрийг харах шаардлагатай.
+
+### 5.4. Гурван ажиллуулалтын exit code
+
+| Ажиллуулалт | Файл | assertions executed / failed | Exit code |
+|---|---|---|---|
+| PASS | `results/newman-pass.txt` | 41 / 0 | **0** |
+| FAIL | `results/newman-fail.txt` | 41 / 1 | **1** |
+| DOWN | `results/newman-down.txt` | 41 / 41 (ECONNREFUSED) | **1** |
