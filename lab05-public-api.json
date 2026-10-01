@@ -1,0 +1,49 @@
+{
+  "info": {
+    "_postman_id": "5e018136-e78b-4b11-a29d-29265c99a78d",
+    "name": "Lab05 Public API (jsonplaceholder)",
+    "description": "Даалгавар 5: GET-only нийтийн API, setup шаардлагагүй.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /users — статус, массив, эхний хэрэглэгчийн нэр",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/users",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Статус код 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Хариу массив байна\", function () {",
+              "    pm.expect(pm.response.json()).to.be.an(\"array\").that.is.not.empty;",
+              "});",
+              "pm.test(\"Эхний хэрэглэгчийн нэр = Leanne Graham\", function () {",
+              "    pm.expect(pm.response.json()[0].name).to.eql(\"Leanne Graham\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

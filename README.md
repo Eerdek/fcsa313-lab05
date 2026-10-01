@@ -181,3 +181,16 @@ assertions 41 / failed 41), **exit code = 1**.
 | PASS | `results/newman-pass.txt` | 41 / 0 | **0** |
 | FAIL | `results/newman-fail.txt` | 41 / 1 | **1** |
 | DOWN | `results/newman-down.txt` | 41 / 41 (ECONNREFUSED) | **1** |
+
+---
+
+## 6. Даалгавар 5 (нэмэлт) — Нийтийн API
+
+`lab05-public-api.json` → `results/newman-public.txt`: `GET https://jsonplaceholder.typicode.com/users`
+дээр 3 oracle — статус `200`, хариу хоосон биш массив, `[0].name = "Leanne Graham"`.
+Үр дүн: assertions 3 / failed 0, exit code 0. (Энэ тусдаа collection тул 5-р хэсгийн 41-д
+тооцогдоогүй.)
+
+GET-only API-д setup огт хэрэггүй тул тест бичихэд хялбар байсан ч өгөгдлийг нь бид
+удирддаггүй — эхний хэрэглэгчийн нэр өөрчлөгдвөл манай буруугүйгээр тест унах тул oracle нь
+өөрийн API-гаас илүү эмзэг.
